@@ -40,4 +40,10 @@ public class TodoController {
 
 		return op;
 	}
+
+	@GetMapping("{id}")
+	@ResponseBody
+	public Mono<Optional<Todo>> findById(@PathVariable("id") final Long id) {
+		return Mono.just(this.repository.findById(id));
+	}
 }
