@@ -43,7 +43,7 @@ public class TodoController {
 
 	@GetMapping("{id}")
 	@ResponseBody
-	public Mono<Optional<Todo>> findById(@PathVariable("id") final Long id) {
-		return Mono.just(this.repository.findById(id));
+	public Mono<Todo> findById(@PathVariable("id") final Long id) {
+		return Mono.justOrEmpty(this.repository.findById(id));
 	}
 }
