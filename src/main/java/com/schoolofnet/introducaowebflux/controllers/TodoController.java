@@ -50,6 +50,6 @@ public class TodoController {
 	@GetMapping
 	@ResponseBody
 	public Flux<Todo> findAll() {
-		return Flux.defer(() -> Flux.fromIterable(this.repository.findAll()));
+		return Flux.defer(() -> Flux.fromIterable(this.repository.findAll())).subscribeOn(jdbcScheduler);
 	}
 }
