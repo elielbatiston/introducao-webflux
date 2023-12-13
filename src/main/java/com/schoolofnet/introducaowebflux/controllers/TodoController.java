@@ -46,4 +46,10 @@ public class TodoController {
 	public Mono<Todo> findById(@PathVariable("id") final Long id) {
 		return Mono.justOrEmpty(this.repository.findById(id));
 	}
+
+	@GetMapping
+	@ResponseBody
+	public Flux<Todo> findAll() {
+		return Flux.defer(() -> Flux.fromIterable(this.repository.findAll()));
+	}
 }
