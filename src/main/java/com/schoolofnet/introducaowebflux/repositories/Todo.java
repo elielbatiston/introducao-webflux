@@ -1,15 +1,16 @@
 package com.schoolofnet.introducaowebflux.repositories;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
 @Table(name = "todos")
 public class Todo {
 
 	@Id
-	@Column
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(value = "name")
 	private String name;
 
 	public Todo() { }
