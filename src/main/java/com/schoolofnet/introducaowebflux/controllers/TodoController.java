@@ -3,13 +3,13 @@ package com.schoolofnet.introducaowebflux.controllers;
 import com.schoolofnet.introducaowebflux.repositories.Todo;
 import com.schoolofnet.introducaowebflux.repositories.TodoRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("todos")
@@ -51,5 +51,16 @@ public class TodoController {
 	@ResponseBody
 	public Flux<Todo> findAll() {
 		return Flux.defer(() -> Flux.fromIterable(this.repository.findAll())).subscribeOn(jdbcScheduler);
+	}
+
+	@DeleteMapping("{id}")
+	@ResponseBody
+	public Mono<ResponseEntity<Void>> remove(@PathVariable("id") final Long id) {
+		return Mono.fromCallable(
+			() -> this.transactionTemplate.execute(action -> {
+				this.repository.deleteById(id);
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+			})
+		).subscribeOn(jdbcScheduler);
 	}
 }
